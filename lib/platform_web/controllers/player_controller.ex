@@ -18,8 +18,10 @@ defmodule PlatformWeb.PlayerController do
     case Accounts.create_player(player_params) do
       {:ok, player} ->
         conn
+        |> PlatformWeb.PlayerAuthController.sign_in(player)
         |> put_flash(:info, "Player created successfully.")
         |> redirect(to: player_path(conn, :show, player))
+  
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
