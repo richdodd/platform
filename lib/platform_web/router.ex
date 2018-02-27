@@ -28,5 +28,6 @@ defmodule PlatformWeb.Router do
 
     resources "/games", GameController, except: [:new, :edit]
     resources "/gameplays", GameplayController, except: [:new, :edit]
+    resources "/players", PlayerApiController, except: [:new, :edit]
   end
 end
