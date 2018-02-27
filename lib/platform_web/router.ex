@@ -15,22 +15,18 @@ defmodule PlatformWeb.Router do
   end
 
   scope "/", PlatformWeb do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
-    resources "/players", PlayerController
-  end
-
-  scope "/", PlatformWeb do
     pipe_through :browser
     
-    get "/", PlayerController, :new
+    get "/", PageController, :index
     resources "/players", PlayerController
     resources "/sessions", PlayerSessionController, only: [:new, :create, :delete]
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PlatformWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PlatformWeb do
+    pipe_through :api
+
+    resources "/games", GameController, except: [:new, :edit]
+    resources "/gameplays", GameplayController, except: [:new, :edit]
+  end
 end
