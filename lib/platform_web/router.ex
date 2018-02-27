@@ -19,13 +19,6 @@ defmodule PlatformWeb.Router do
 
     get "/", PageController, :index
     resources "/players", PlayerController
-  end
-
-  scope "/", PlatformWeb do
-    pipe_through :browser
-    
-    get "/", PlayerController, :new
-    resources "/players", PlayerController
     resources "/sessions", PlayerSessionController, only: [:new, :create, :delete]
   end
 
