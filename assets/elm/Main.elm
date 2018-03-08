@@ -4,6 +4,7 @@ import Html exposing (..)
 
 import Html.Attributes exposing (..)
 
+-- MAIN
 main : Html msg
 main =
     div []
@@ -11,6 +12,27 @@ main =
     , gamesIndex
     ]
 
+-- MODEL
+model : List String
+model =
+    [ "Platform Game"
+    , "Adventure Game"
+    ]
+
+firstGameMaybe : Maybe String
+firstGameMaybe =
+    List.head model
+
+firstGameTitle : String
+firstGameTitle =
+    case firstGameMaybe of
+        Just gameTitle ->
+            gameTitle
+
+        Nothing ->
+            ""
+
+-- VIEW
 gamesIndex : Html msg
 gamesIndex =
     div [ class "games-index" ] [ gamesList ]
@@ -21,4 +43,4 @@ gamesList =
 
 gamesListItem : Html msg
 gamesListItem =
-    li [] [ text "Platform Game" ]
+    li [] [ text firstGameTitle ]
