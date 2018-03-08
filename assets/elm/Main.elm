@@ -25,12 +25,7 @@ firstGameMaybe =
 
 firstGameTitle : String
 firstGameTitle =
-    case firstGameMaybe of
-        Just gameTitle ->
-            gameTitle
-
-        Nothing ->
-            ""
+    Maybe.withDefault "" firstGameMaybe
 
 -- VIEW
 gamesIndex : Html msg
