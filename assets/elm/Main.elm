@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 
 
 main : Program Never Model Msg
@@ -77,9 +78,12 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [ class "games-section" ] [ text "Games" ]
-        , button [ class "btn btn-success" ] [ text "Display Games List" ]
-        , button [ class "btn btn-danger" ] [ text "Hide Games List" ]
-        , gamesIndex model
+        , button [ class "btn btn-success", onClick DisplayGamesList ] [ text "Display Games List" ]
+        , button [ class "btn btn-danger", onClick HideGamesList ] [ text "Hide Games List" ]
+        , if model.displayGamesList then
+            gamesIndex model
+          else
+            div [] []
         ]
 
 
