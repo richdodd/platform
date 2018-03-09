@@ -79,19 +79,23 @@ view model =
         [ h1 [ class "games-section" ] [ text "Games" ]
         , button [ class "btn btn-success" ] [ text "Display Games List" ]
         , button [ class "btn btn-danger" ] [ text "Hide Games List" ]
+        , gamesIndex model
         ]
 
 
-gamesIndex : List String -> Html msg
-gamesIndex gameTitles =
-    div [ class "games-index" ] [ gamesList gameTitles ]
+gamesIndex : Model -> Html msg
+gamesIndex model =
+    div [ class "games-index" ] [ gamesList model.gamesList ]
 
 
-gamesList : List String -> Html msg
-gamesList gameTitles =
-    ul [ class "games-list" ] (List.map gamesListItem gameTitles)
+gamesList : List Game -> Html msg
+gamesList games =
+    ul [ class "games-list" ] (List.map gamesListItem games)
 
 
-gamesListItem : String -> Html msg
-gamesListItem gameTitle =
-    li [] [ text gameTitle ]
+gamesListItem : Game -> Html msg
+gamesListItem game =
+    li [ class "game-item" ]
+        [ strong [] [ text game.gameTitle ]
+        , p [] [ text game.gameDescription ]
+        ]
