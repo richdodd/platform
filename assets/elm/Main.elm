@@ -193,7 +193,10 @@ playersIndex model =
     else
         div [ class "players-index" ]
             [ h1 [ class "players-section" ] [ text "Players" ]
-            , playersList model.playersList
+            , model.playersList
+                |> List.sortBy .score
+                |> List.reverse
+                |> playersList
             ]
 
 
