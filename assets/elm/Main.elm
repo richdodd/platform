@@ -188,16 +188,19 @@ gamesListItem game =
 
 playersIndex : Model -> Html msg
 playersIndex model =
-    if List.isEmpty model.playersList then
-        div [] []
-    else
-        div [ class "players-index" ]
-            [ h1 [ class "players-section" ] [ text "Players" ]
-            , model.playersList
+    let
+        playersSortedByScore =
+            model.playersList
                 |> List.sortBy .score
                 |> List.reverse
-                |> playersList
-            ]
+    in
+        if List.isEmpty model.playersList then
+            div [] []
+        else
+            div [ class "players-index" ]
+                [ h1 [ class "players-section" ] [ text "Players" ]
+                , playersList playersSortedByScore
+                ]
 
 
 playersList : List Player -> Html msg
