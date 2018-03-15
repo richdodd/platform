@@ -2,7 +2,6 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
 import Http exposing (..)
 import Json.Decode as Decode
 
@@ -102,7 +101,10 @@ decodePlayer =
 
 initialCommand : Cmd Msg
 initialCommand =
-    fetchGamesList
+    Cmd.batch
+        [ fetchGamesList
+        , fetchPlayersList
+        ]
 
 
 init : ( Model, Cmd Msg )
@@ -154,18 +156,21 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    if List.isEmpty model.gamesList then
-        div [] []
-    else
-        div []
-            [ h1 [ class "games-section" ] [ text "Games" ]
-            , gamesIndex model
-            ]
+    div []
+        [ gamesIndex model
+        , playersIndex model
+        ]
 
 
 gamesIndex : Model -> Html msg
 gamesIndex model =
-    div [ class "games-index" ] [ gamesList model.gamesList ]
+    if List.isEmpty model.gamesList then
+        div [] []
+    else
+        div [ class "games-index" ]
+            [ h1 [ class "games-section" ] [ text "Games" ]
+            , gamesList model.gamesList
+            ]
 
 
 gamesList : List Game -> Html msg
@@ -178,4 +183,28 @@ gamesListItem game =
     li [ class "game-item" ]
         [ strong [] [ text game.title ]
         , p [] [ text game.description ]
+        ]
+
+
+playersIndex : Model -> Html msg
+playersIndex model =
+    if List.isEmpty model.playersList then
+        div [] []
+    else
+        div [ class "players-index" ]
+            [ h1 [ class "players-section" ] [ text "Players" ]
+            , playersList model.playersList
+            ]
+
+
+playersList : List Player -> Html msg
+playersList players =
+    ul [ class "players-list" ] (List.map playersListItem players)
+
+
+playersListItem : Player -> Html msg
+playersListItem player =
+    li [ class "player-item" ]
+        [ strong [] [ text player.displayName ]
+        , p [] [ text (toString player.score) ]
         ]
