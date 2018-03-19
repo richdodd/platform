@@ -245,7 +245,10 @@ playersSortedByScore players =
 
 playersList : List Player -> Html msg
 playersList players =
-    ul [ class "players-list" ] (List.map playersListItem players)
+    div [ class "players-list panel panel-info" ]
+        [ div [ class "panel-heading" ] [ text "Leaderboard" ]
+        , ul [ class "list-group" ] (List.map playersListItem players)
+        ]
 
 
 playersListItem : Player -> Html msg
@@ -256,8 +259,11 @@ playersListItem player =
                 player.username
             else
                 Maybe.withDefault "" player.displayName
+
+        playerLink =
+            "players/" ++ (toString player.id)
     in
-        li [ class "player-item" ]
-            [ strong [] [ text displayName ]
-            , p [] [ text (toString player.score) ]
+        li [ class "player-item list-group-item" ]
+            [ strong [] [ a [ href playerLink ] [ text displayName ] ]
+            , span [ class "badge" ] [ text (toString player.score) ]
             ]
