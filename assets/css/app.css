@@ -38,3 +38,9 @@
     margin-top: 50px;
     overflow: hidden;
 }
+
+.nav {
+    margin-top: 6px;
+    max-height: 50px;
+    overflow: hidden;
+}
