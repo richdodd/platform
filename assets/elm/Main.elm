@@ -159,9 +159,23 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div []
-        [ gamesIndex model
+        [ featured model
+        , gamesIndex model
         , playersIndex model
         ]
+
+
+featured : Model -> Html msg
+featured model =
+    div [ class "row featured" ]
+        [ h1 [] [ text "Featured" ] ]
+
+
+featuredGame : List Game -> Maybe Game
+featuredGame games =
+    games
+        |> List.filter .featured
+        |> List.head
 
 
 gamesIndex : Model -> Html msg
