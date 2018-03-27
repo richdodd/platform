@@ -21,6 +21,10 @@ import "phoenix_html"
 // import socket from "./socket"
 
 // Elm
-import Elm from "./main"
+import Elm from "./elm"
+
 const elmContainer = document.querySelector("#elm-container");
+const platformer = document.querySelector("#platformer");
+
 if (elmContainer) Elm.Main.embed(elmContainer);
+if (platformer) Elm.Platformer.embed(platformer);
