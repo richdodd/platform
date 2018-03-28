@@ -9,6 +9,11 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+To install elm packages used in the elm project:
+
+  * Navigate to assets folder
+  * Install packages for elm `elm-package install`
+
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
 ## Learn more
