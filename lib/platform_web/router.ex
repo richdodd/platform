@@ -18,7 +18,7 @@ defmodule PlatformWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/games/:id", GameController, :play
+    get "/games/:slug", GameController, :play
     resources "/players", PlayerController
     resources "/sessions", PlayerSessionController, only: [:new, :create, :delete]
   end
