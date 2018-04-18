@@ -1,10 +1,14 @@
 module Platformer exposing (..)
 
 import Html exposing (Html, div, text)
+import Keyboard exposing (KeyCode, downs)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
+
 -- MAIN
+
+
 main : Program Never Model Msg
 main =
     Html.program
@@ -14,11 +18,16 @@ main =
         , subscriptions = subscriptions
         }
 
+
+
 -- MODEL
+
+
 type alias Model =
     { characterPositionX : Int
     , characterPositionY : Int
     }
+
 
 initialModel : Model
 initialModel =
@@ -26,13 +35,20 @@ initialModel =
     , characterPositionY = 300
     }
 
+
 init : ( Model, Cmd Msg )
 init =
     ( initialModel, Cmd.none )
 
+
+
 -- UPDATE
+
+
 type Msg
     = NoOp
+    | KeyDown KeyCode
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -40,15 +56,27 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        KeyDown keyCode ->
+            ( { model | characterPositionX = model.characterPositionX + 15 }, Cmd.none )
+
+
+
 -- SUBSCRIPTIONS
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.batch [ downs KeyDown ]
+
+
 
 -- VIEW
+
+
 view : Model -> Html Msg
 view model =
     div [] [ viewGame model ]
+
 
 viewGame : Model -> Svg Msg
 viewGame model =
@@ -59,6 +87,7 @@ viewGame model =
         , viewCharacter model
         ]
 
+
 viewGameWindow : Svg Msg
 viewGameWindow =
     rect
@@ -68,6 +97,7 @@ viewGameWindow =
         , stroke "black"
         ]
         []
+
 
 viewGameSky : Svg Msg
 viewGameSky =
@@ -80,6 +110,7 @@ viewGameSky =
         ]
         []
 
+
 viewGameGround : Svg Msg
 viewGameGround =
     rect
@@ -91,13 +122,14 @@ viewGameGround =
         ]
         []
 
+
 viewCharacter : Model -> Svg Msg
 viewCharacter model =
     image
-    [ xlinkHref "/images/character.gif"
-    , x (toString model.characterPositionX)
-    , y (toString model.characterPositionY)
-    , width "50"
-    , height "50"
-    ]
-    []
+        [ xlinkHref "/images/character.gif"
+        , x (toString model.characterPositionX)
+        , y (toString model.characterPositionY)
+        , width "50"
+        , height "50"
+        ]
+        []
