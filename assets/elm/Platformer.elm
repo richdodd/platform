@@ -119,7 +119,20 @@ viewGame model =
         , viewGameSky
         , viewGameGround
         , viewCharacter model
+        , viewItem model
         ]
+
+
+viewItem : Model -> Svg Msg
+viewItem model =
+    image
+        [ xlinkHref "/images/coin.svg"
+        , x (toString model.itemPositionX)
+        , y (toString model.itemPositionY)
+        , width "20"
+        , height "20"
+        ]
+        []
 
 
 viewGameWindow : Svg Msg
