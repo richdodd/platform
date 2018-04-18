@@ -57,7 +57,15 @@ update msg model =
             ( model, Cmd.none )
 
         KeyDown keyCode ->
-            ( { model | characterPositionX = model.characterPositionX + 15 }, Cmd.none )
+            case keyCode of
+                37 ->
+                    ( { model | characterPositionX = model.characterPositionX - 15 }, Cmd.none )
+
+                39 ->
+                    ( { model | characterPositionX = model.characterPositionX + 15 }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 
