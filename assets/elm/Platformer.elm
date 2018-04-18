@@ -91,7 +91,17 @@ update msg model =
 
 characterFoundItem : Model -> Bool
 characterFoundItem model =
-    model.characterPositionX == model.itemPositionX
+    let
+        approximateItemLowerBound =
+            model.itemPositionX - 35
+
+        approximateItemUpperBound =
+            model.itemPositionX
+
+        approximateItemRange =
+            List.range approximateItemLowerBound approximateItemUpperBound
+    in
+        List.member model.characterPositionX approximateItemRange
 
 
 
