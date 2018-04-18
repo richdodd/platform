@@ -28,11 +28,6 @@ type Direction
     | Right
 
 
-type Bool
-    = True
-    | False
-
-
 type alias Model =
     { characterDirection : Direction
     , characterPositionX : Int
@@ -94,6 +89,11 @@ update msg model =
                     ( model, Cmd.none )
 
 
+characterFoundItem : Model -> Bool
+characterFoundItem model =
+    model.characterPositionX == model.itemPositionX
+
+
 
 -- SUBSCRIPTIONS
 
@@ -125,14 +125,19 @@ viewGame model =
 
 viewItem : Model -> Svg Msg
 viewItem model =
-    image
-        [ xlinkHref "/images/coin.svg"
-        , x (toString model.itemPositionX)
-        , y (toString model.itemPositionY)
-        , width "20"
-        , height "20"
-        ]
-        []
+    case characterFoundItem model of
+        True ->
+            svg [] []
+
+        False ->
+            image
+                [ xlinkHref "/images/coin.svg"
+                , x (toString model.itemPositionX)
+                , y (toString model.itemPositionY)
+                , width "20"
+                , height "20"
+                ]
+                []
 
 
 viewGameWindow : Svg Msg
