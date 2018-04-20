@@ -62,6 +62,7 @@ init =
 type Msg
     = NoOp
     | KeyDown KeyCode
+    | SetNewItemPositionX Int
     | TimeUpdate Time
 
 
@@ -94,9 +95,12 @@ update msg model =
 
         TimeUpdate time ->
             if characterFoundItem model then
-                ( { model | itemPositionX = model.itemPositionX - 100 }, Cmd.none )
+                ( model, Random.generate SetNewItemPositionX (Random.int 50 500) )
             else
                 ( model, Cmd.none )
+
+        SetNewItemPositionX newPositionX ->
+            ( { model | itemPositionX = newPositionX }, Cmd.none )
 
 
 characterFoundItem : Model -> Bool
