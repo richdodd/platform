@@ -6,7 +6,7 @@ import Keyboard exposing (KeyCode, downs)
 import Random
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import Time exposing (Time)
+import Time exposing (Time, every, second)
 
 
 -- MAIN
@@ -52,7 +52,7 @@ initialModel =
     , itemPositionY = 300
     , itemsCollected = 0
     , playerScore = 0
-    , timeRemaining = 0
+    , timeRemaining = 10
     }
 
 
@@ -67,6 +67,7 @@ init =
 
 type Msg
     = NoOp
+    | CountdownTimer Time
     | KeyDown KeyCode
     | SetNewItemPositionX Int
     | TimeUpdate Time
@@ -110,6 +111,12 @@ update msg model =
             else
                 ( model, Cmd.none )
 
+        CountdownTimer time ->
+            if model.timeRemaining > 0 then
+                ( { model | timeRemaining = model.timeRemaining - 1 }, Cmd.none )
+            else
+                ( model, Cmd.none )
+
         SetNewItemPositionX newPositionX ->
             ( { model | itemPositionX = newPositionX }, Cmd.none )
 
@@ -138,6 +145,7 @@ subscriptions model =
     Sub.batch
         [ downs KeyDown
         , diffs TimeUpdate
+        , every second CountdownTimer
         ]
 
 
