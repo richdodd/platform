@@ -152,6 +152,7 @@ viewGame model =
         , viewCharacter model
         , viewItem model
         , viewGameScore model
+        , viewItemsCollected model
         ]
 
 
@@ -246,4 +247,25 @@ viewGameScore model =
         Svg.svg []
             [ viewGameText 25 25 "SCORE"
             , viewGameText 25 40 currentScore
+            ]
+
+
+viewItemsCollected : Model -> Svg Msg
+viewItemsCollected model =
+    let
+        currentItemCount =
+            model.itemsCollected
+                |> toString
+                |> String.padLeft 3 '0'
+    in
+        Svg.svg []
+            [ image
+                [ xlinkHref "/images/coin.svg"
+                , x "275"
+                , y "18"
+                , width "15"
+                , height "15"
+                ]
+                []
+            , viewGameText 300 30 ("x " ++ currentItemCount)
             ]
