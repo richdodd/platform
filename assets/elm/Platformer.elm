@@ -140,6 +140,8 @@ update msg model =
                 )
             else if model.itemsCollected >= 10 then
                 ( { model | gameState = Success }, Cmd.none )
+            else if model.itemsCollected < 10 && model.timeRemaining == 0 then
+                ( { model | gameState = GameOver }, Cmd.none )
             else
                 ( model, Cmd.none )
 
@@ -358,7 +360,13 @@ viewGameState model =
             ]
 
         GameOver ->
-            []
+            [ viewGameWindow
+            , viewGameSky
+            , viewGameGround
+            , viewCharacter model
+            , viewItem model
+            , viewGameOverScreenText
+            ]
 
 
 viewStartScreenText : Svg Msg
@@ -372,6 +380,14 @@ viewStartScreenText =
 viewSuccessScreenText : Svg Msg
 viewSuccessScreenText =
     Svg.svg []
-        [ viewGameText 260 180 "Success!"
+        [ viewGameText 260 160 "Success!"
+        , viewGameText 140 180 "Press the SPACE BAR key to restart."
+        ]
+
+
+viewGameOverScreenText : Svg Msg
+viewGameOverScreenText =
+    Svg.svg []
+        [ viewGameText 260 160 "Game Over"
         , viewGameText 140 180 "Press the SPACE BAR key to restart."
         ]
