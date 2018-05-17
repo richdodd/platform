@@ -90,21 +90,34 @@ update msg model =
 
         KeyDown keyCode ->
             case keyCode of
-                37 ->
+                32 ->
                     ( { model
-                        | characterDirection = Left
-                        , characterPositionX = model.characterPositionX - 15
+                        | gameState = Playing
                       }
                     , Cmd.none
                     )
 
+                37 ->
+                    if model.gameState == Playing then
+                        ( { model
+                            | characterDirection = Left
+                            , characterPositionX = model.characterPositionX - 15
+                          }
+                        , Cmd.none
+                        )
+                    else
+                        ( model, Cmd.none )
+
                 39 ->
-                    ( { model
-                        | characterDirection = Right
-                        , characterPositionX = model.characterPositionX + 15
-                      }
-                    , Cmd.none
-                    )
+                    if model.gameState == Playing then
+                        ( { model
+                            | characterDirection = Right
+                            , characterPositionX = model.characterPositionX + 15
+                          }
+                        , Cmd.none
+                        )
+                    else
+                        ( model, Cmd.none )
 
                 _ ->
                     ( model, Cmd.none )
@@ -121,7 +134,7 @@ update msg model =
                 ( model, Cmd.none )
 
         CountdownTimer time ->
-            if model.timeRemaining > 0 then
+            if model.gameState == Playing && model.timeRemaining > 0 then
                 ( { model | timeRemaining = model.timeRemaining - 1 }, Cmd.none )
             else
                 ( model, Cmd.none )
