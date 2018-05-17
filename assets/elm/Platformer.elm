@@ -31,10 +31,18 @@ type Direction
     | Right
 
 
+type GameState
+    = StartScreen
+    | Playing
+    | Success
+    | GameOver
+
+
 type alias Model =
     { characterDirection : Direction
     , characterPositionX : Int
     , characterPositionY : Int
+    , gameState : GameState
     , itemPositionX : Int
     , itemPositionY : Int
     , itemsCollected : Int
@@ -48,6 +56,7 @@ initialModel =
     { characterDirection = Right
     , characterPositionX = 50
     , characterPositionY = 300
+    , gameState = StartScreen
     , itemPositionX = 500
     , itemPositionY = 300
     , itemsCollected = 0
@@ -161,15 +170,7 @@ view model =
 viewGame : Model -> Svg Msg
 viewGame model =
     svg [ version "1.1", width "600", height "400" ]
-        [ viewGameWindow
-        , viewGameSky
-        , viewGameGround
-        , viewCharacter model
-        , viewItem model
-        , viewGameScore model
-        , viewItemsCollected model
-        , viewGameTime model
-        ]
+        (viewGameState model)
 
 
 viewItem : Model -> Svg Msg
@@ -299,3 +300,41 @@ viewGameTime model =
             [ viewGameText 525 25 "TIME"
             , viewGameText 525 40 currentTime
             ]
+
+
+viewGameState : Model -> List (Svg Msg)
+viewGameState model =
+    case model.gameState of
+        StartScreen ->
+            [ viewGameWindow
+            , viewGameSky
+            , viewGameGround
+            , viewCharacter model
+            , viewItem model
+            , viewStartScreenText
+            ]
+
+        Playing ->
+            [ viewGameWindow
+            , viewGameSky
+            , viewGameGround
+            , viewCharacter model
+            , viewItem model
+            , viewGameScore model
+            , viewItemsCollected model
+            , viewGameTime model
+            ]
+
+        Success ->
+            []
+
+        GameOver ->
+            []
+
+
+viewStartScreenText : Svg Msg
+viewStartScreenText =
+    Svg.svg []
+        [ viewGameText 140 160 "Collect ten coins in ten seconds!"
+        , viewGameText 140 180 "Press the SPACE BAR key to start."
+        ]
