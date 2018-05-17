@@ -37,6 +37,8 @@ type alias Model =
     , characterPositionY : Int
     , itemPositionX : Int
     , itemPositionY : Int
+    , itemsCollected : Int
+    , playerScore : Int
     }
 
 
@@ -47,6 +49,8 @@ initialModel =
     , characterPositionY = 300
     , itemPositionX = 500
     , itemPositionY = 300
+    , itemsCollected = 0
+    , playerScore = 0
     }
 
 
@@ -147,6 +151,7 @@ viewGame model =
         , viewGameGround
         , viewCharacter model
         , viewItem model
+        , viewGameScore model
         ]
 
 
@@ -216,3 +221,29 @@ viewCharacter model =
             , height "50"
             ]
             []
+
+
+viewGameText : Int -> Int -> String -> Svg Msg
+viewGameText positionX positionY str =
+    Svg.text_
+        [ x (toString positionX)
+        , y (toString positionY)
+        , fontFamily "Courier"
+        , fontWeight "bold"
+        , fontSize "16"
+        ]
+        [ Svg.text str ]
+
+
+viewGameScore : Model -> Svg Msg
+viewGameScore model =
+    let
+        currentScore =
+            model.playerScore
+                |> toString
+                |> String.padLeft 5 '0'
+    in
+        Svg.svg []
+            [ viewGameText 25 25 "SCORE"
+            , viewGameText 25 40 currentScore
+            ]
