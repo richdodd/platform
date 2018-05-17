@@ -91,11 +91,19 @@ update msg model =
         KeyDown keyCode ->
             case keyCode of
                 32 ->
-                    ( { model
-                        | gameState = Playing
-                      }
-                    , Cmd.none
-                    )
+                    if model.gameState /= Playing then
+                        ( { model
+                            | characterDirection = Right
+                            , characterPositionX = 50
+                            , itemsCollected = 0
+                            , gameState = Playing
+                            , playerScore = 0
+                            , timeRemaining = 10
+                          }
+                        , Cmd.none
+                        )
+                    else
+                        ( model, Cmd.none )
 
                 37 ->
                     if model.gameState == Playing then
@@ -130,6 +138,8 @@ update msg model =
                   }
                 , Random.generate SetNewItemPositionX (Random.int 50 500)
                 )
+            else if model.itemsCollected >= 10 then
+                ( { model | gameState = Success }, Cmd.none )
             else
                 ( model, Cmd.none )
 
@@ -339,7 +349,13 @@ viewGameState model =
             ]
 
         Success ->
-            []
+            [ viewGameWindow
+            , viewGameSky
+            , viewGameGround
+            , viewCharacter model
+            , viewItem model
+            , viewSuccessScreenText
+            ]
 
         GameOver ->
             []
@@ -350,4 +366,12 @@ viewStartScreenText =
     Svg.svg []
         [ viewGameText 140 160 "Collect ten coins in ten seconds!"
         , viewGameText 140 180 "Press the SPACE BAR key to start."
+        ]
+
+
+viewSuccessScreenText : Svg Msg
+viewSuccessScreenText =
+    Svg.svg []
+        [ viewGameText 260 180 "Success!"
+        , viewGameText 140 180 "Press the SPACE BAR key to restart."
         ]
