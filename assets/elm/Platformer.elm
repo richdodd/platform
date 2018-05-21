@@ -19,9 +19,9 @@ import Json.Encode as Encode
 -- MAIN
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { init = init
         , view = view
         , update = update
@@ -43,6 +43,11 @@ type GameState
     | Playing
     | Success
     | GameOver
+
+
+type alias Flags =
+    { token : String
+    }
 
 
 type alias Gameplay =
@@ -67,8 +72,8 @@ type alias Model =
     }
 
 
-initialModel : Model
-initialModel =
+initialModel : Flags -> Model
+initialModel flags =
     { characterDirection = Right
     , characterPositionX = 50
     , characterPositionY = 300
@@ -77,22 +82,22 @@ initialModel =
     , itemPositionX = 500
     , itemPositionY = 300
     , itemsCollected = 0
-    , phxSocket = initialSocketJoin
+    , phxSocket = initialSocketJoin flags
     , playerScore = 0
     , timeRemaining = 10
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( initialModel, Cmd.map PhoenixMsg initialSocketCommand )
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    ( initialModel flags, Cmd.map PhoenixMsg (initialSocketCommand flags) )
 
 
-initialSocket : ( Phoenix.Socket.Socket Msg, Cmd (Phoenix.Socket.Msg Msg) )
-initialSocket =
+initialSocket : Flags -> ( Phoenix.Socket.Socket Msg, Cmd (Phoenix.Socket.Msg Msg) )
+initialSocket flags =
     let
         devSocketServer =
-            "ws://localhost:4000/socket/websocket"
+            "ws://localhost:4000/socket/websocket?token=" ++ flags.token
     in
         Phoenix.Socket.init devSocketServer
             |> Phoenix.Socket.withDebug
@@ -106,15 +111,15 @@ initialChannel =
     Phoenix.Channel.init "score:platformer"
 
 
-initialSocketJoin : Phoenix.Socket.Socket Msg
-initialSocketJoin =
-    initialSocket
+initialSocketJoin : Flags -> Phoenix.Socket.Socket Msg
+initialSocketJoin flags =
+    initialSocket flags
         |> Tuple.first
 
 
-initialSocketCommand : Cmd (Phoenix.Socket.Msg Msg)
-initialSocketCommand =
-    initialSocket
+initialSocketCommand : Flags -> Cmd (Phoenix.Socket.Msg Msg)
+initialSocketCommand flags =
+    initialSocket flags
         |> Tuple.second
 
 

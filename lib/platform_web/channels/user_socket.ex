@@ -19,6 +19,16 @@ defmodule PlatformWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
+  def connect(%{"token" => token}, socket) do
+    case Phoenix.Token.verify(socket, "user socket", token, max_age: 1209600) do
+      {:ok, current_user_id} ->
+        socket = assign(socket, :player_id, current_user_id)
+        {:ok, socket}
+      {:error, _} ->
+        :error
+    end
+  end
+  
   def connect(_params, socket) do
     {:ok, socket}
   end
