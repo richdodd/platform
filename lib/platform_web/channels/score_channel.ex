@@ -11,7 +11,7 @@ defmodule PlatformWeb.ScoreChannel do
         payload = %{
             player_score: player_score,
             game_id: socket.assigns.game_id,
-            player_id: 1
+            player_id: socket.assigns.player_id
         }
 
         Platform.Products.create_gameplay(payload)
